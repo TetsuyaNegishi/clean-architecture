@@ -1,32 +1,38 @@
 
-import { Step } from "gauge-ts";
+import { Step, BeforeSuite, BeforeSpec, AfterSpec, AfterSuite } from "gauge-ts";
 import { equal } from "assert";
+import * as puppeteer from 'puppeteer';
 
 export default class StepImplementation {
+    private browser: puppeteer.Browser;
+    private page: puppeteer.Page;
 
-    private vowels: Array<string>;
-
-    @Step("Vowels in English language are <vowelString>.")
-    public async setLanguageVowels(vowelString: string) {
-        this.vowels = vowelString.split('');
+    @BeforeSuite()
+    public async setupBrowser() {
+        this.browser = await puppeteer.launch()
     }
 
-    @Step("The word <word> has <expectedCount> vowels.")
-    public async verifyVowelsCountInWord(word: string, expectedCount: number) {
-        equal(await this.countVowels(word), expectedCount);
+    @AfterSuite()
+    public async closeBrowser() {
+        await this.browser.close();
     }
 
-    @Step("Almost all words have vowels <wordsTable>")
-    public async verifyVowelsCountInMultipleWords(wordsTable: any) {
-        for (const row of wordsTable.rows) {
-            equal(await this.countVowels(row.cells[0]), parseInt(row.cells[1]));
-        }
+    @BeforeSpec()
+    public async openLocalhostPage() {
+        this.page = await this.browser.newPage();
+        await this.page.goto('http://localhost:3000/')
     }
 
-    private async countVowels(word: string) {
-        return word.split("").filter((elem) => {
-            return this.vowels.includes(elem);
-        }).length;
+    @AfterSpec()
+    public async closePage() {
+        await this.page.close();
     }
 
+    @Step("Learn Reactへのリンクが表示されている")
+    public async displayLearnReact() {
+        const text = await this.page.$eval('.App-link', selector => {
+            return selector.textContent
+        })
+        equal(text, 'Learn React')
+    }
 }

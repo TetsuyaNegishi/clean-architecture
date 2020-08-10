@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Starter template for writing TypeScript tests for Gauge",
   "dependencies": {
-    "gauge-ts": "0.0.5"
+    "@types/puppeteer": "^3.0.1",
+    "gauge-ts": "0.0.5",
+    "puppeteer": "^5.2.1"
   },
   "devDependencies": {
     "@types/node": "latest"
