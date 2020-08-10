@@ -30,6 +30,7 @@ export default class StepImplementation {
 
     @Step("Learn Reactへのリンクが表示されている")
     public async displayLearnReact() {
+        await this.page.waitForSelector('.App-link')
         const text = await this.page.$eval('.App-link', selector => {
             return selector.textContent
         })

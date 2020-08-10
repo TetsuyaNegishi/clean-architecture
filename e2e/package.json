@@ -2,9 +2,14 @@
   "name": "gauge-ts-template",
   "version": "0.0.1",
   "description": "Starter template for writing TypeScript tests for Gauge",
+  "scripts": {
+    "mock": "node ./mock/index.js"
+  },
   "dependencies": {
+    "@types/json-server": "^0.14.2",
     "@types/puppeteer": "^3.0.1",
     "gauge-ts": "0.0.5",
+    "json-server": "^0.16.1",
     "puppeteer": "^5.2.1"
   },
   "devDependencies": {
