@@ -1,35 +1,54 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
+import { useObserver } from "mobx-react-lite"
 import logo from './logo.svg';
 import './App.css';
-import axios from 'axios'
+import {TestDriver} from './lib/driver/test';
+import {TestGateway} from './lib/gateway/test';
+import {TestUsecase} from './lib/usecase/test'
+import {TestStore} from './lib/store/test';
+
+const store = new TestStore();
+const driver = new TestDriver();
+const gateway = new TestGateway(driver);
+const usecase = new TestUsecase(gateway, store);
+
+const StoreContext = React.createContext<TestStore>({} as TestStore);
+const UsecaseContext = React.createContext<TestUsecase>({} as TestUsecase);
+
+const SetUpApp:React.FC = ({ children }) => (
+  <StoreContext.Provider value={store}>
+    <UsecaseContext.Provider value={usecase}>
+      {children}
+    </UsecaseContext.Provider>
+  </StoreContext.Provider>
+)
 
 function App() {
-  const [text, setText] = useState('');
+  const store = React.useContext(StoreContext)
+  const usecase = React.useContext(UsecaseContext)
 
   useEffect(() => {
-    axios.get('http://localhost:4000/test').then(({data}) => {
-      setText(data?.text)
-    })
-  }, [])
+    usecase.fetch();
+  }, [usecase])
 
-  return (
+  return useObserver(() => (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        {text && <a
+        {store.text && <a
           className="App-link"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
-          {text}
+          {store.text}
         </a>}
       </header>
     </div>
-  );
+  ));
 }
 
-export default App;
+export default () => <SetUpApp><App /></SetUpApp>;
