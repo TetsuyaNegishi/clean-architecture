@@ -1,7 +1,7 @@
 import {Test} from '../domain/test'
 
 export interface InputTestPort {
-	fetch: () => Promise<Test>
+	fetch: () => Promise<Test | Error>
 }
 
 export interface OutputTestPort {
