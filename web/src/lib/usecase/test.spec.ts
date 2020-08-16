@@ -7,14 +7,14 @@ describe('TestUsecase', () => {
 		const fechFunctionMock = jest.fn(async () => {
 			return new Test('test')
 		})
-		const InputPortMock = jest.fn().mockImplementationOnce(() => {
+		const InputPortMock = jest.fn<InputTestPort, []>().mockImplementationOnce(() => {
 			return {
 				fetch: fechFunctionMock
 			}
 		})
 
 		const storeFunctionMock = jest.fn(async (data: Test) => {})
-		const OutputPortMock = jest.fn().mockImplementationOnce(() => {
+		const OutputPortMock = jest.fn<OutputTestPort, []>().mockImplementationOnce(() => {
 			return {
 				store: storeFunctionMock
 			}
@@ -22,7 +22,7 @@ describe('TestUsecase', () => {
 
 		const gateway = new InputPortMock()
 		const store = new OutputPortMock()
-		const usecase = new TestUsecase(gateway as InputTestPort, store  as OutputTestPort)
+		const usecase = new TestUsecase(gateway, store)
 
 		await usecase.fetch();
 
@@ -34,14 +34,14 @@ describe('TestUsecase', () => {
 		const fechFunctionMock = jest.fn(async () => {
 			return new Error()
 		})
-		const InputPortMock = jest.fn().mockImplementationOnce(() => {
+		const InputPortMock = jest.fn<InputTestPort, []>().mockImplementationOnce(() => {
 			return {
 				fetch: fechFunctionMock
 			}
 		})
 
 		const storeFunctionMock = jest.fn(async (data: Test) => {})
-		const OutputPortMock = jest.fn().mockImplementationOnce(() => {
+		const OutputPortMock = jest.fn<OutputTestPort, []>().mockImplementationOnce(() => {
 			return {
 				store: storeFunctionMock
 			}
@@ -49,7 +49,7 @@ describe('TestUsecase', () => {
 
 		const gateway = new InputPortMock()
 		const store = new OutputPortMock()
-		const usecase = new TestUsecase(gateway as InputTestPort, store  as OutputTestPort)
+		const usecase = new TestUsecase(gateway, store)
 
 		await usecase.fetch();
 
