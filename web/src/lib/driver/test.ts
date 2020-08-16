@@ -9,7 +9,7 @@ export class FetchError extends Error {}
 export class TestDriver {
 	async fetch() {
 		const { status, data } = await axios.get<ResponseDataType>('http://localhost:4000/test')
-		if (status === 202) {
+		if (status <= 400) {
 			return data;
 		}
 
