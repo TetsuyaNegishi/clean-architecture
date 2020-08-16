@@ -2,26 +2,7 @@ import React, {useEffect} from 'react';
 import { useObserver } from "mobx-react-lite"
 import logo from './logo.svg';
 import './App.css';
-import {TestDriver} from './lib/driver/test';
-import {TestGateway} from './lib/gateway/test';
-import {TestUsecase} from './lib/usecase/test'
-import {TestStore} from './lib/store/test';
-
-const store = new TestStore();
-const driver = new TestDriver();
-const gateway = new TestGateway(driver);
-const usecase = new TestUsecase(gateway, store);
-
-const StoreContext = React.createContext<TestStore>({} as TestStore);
-const UsecaseContext = React.createContext<TestUsecase>({} as TestUsecase);
-
-const SetUpApp:React.FC = ({ children }) => (
-  <StoreContext.Provider value={store}>
-    <UsecaseContext.Provider value={usecase}>
-      {children}
-    </UsecaseContext.Provider>
-  </StoreContext.Provider>
-)
+import { Provider, StoreContext, UsecaseContext } from './Provider'
 
 function App() {
   const store = React.useContext(StoreContext)
@@ -51,4 +32,4 @@ function App() {
   ));
 }
 
-export default () => <SetUpApp><App /></SetUpApp>;
+export default () => <Provider><App /></Provider>;
