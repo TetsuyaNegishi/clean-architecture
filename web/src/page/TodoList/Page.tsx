@@ -12,6 +12,6 @@ export const TodoListPage: React.FC = () => {
   }, [todoListUsecase])
 
 	return useObserver(() => {
-		return <TodoList todoList={store.todoList}/>
+		return <TodoList todoList={store.value}/>
 	})
 }

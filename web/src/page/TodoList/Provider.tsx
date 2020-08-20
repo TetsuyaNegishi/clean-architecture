@@ -1,16 +1,13 @@
 import React from 'react'
+import { TodoListUsecase } from '../../lib/usecase/todoList'
+import { TodoListGateway } from '../../lib/gateway/todoList'
+import { TodoListDriver } from '../../lib/driver/todoList'
+import { TodoListStore } from '../../lib/store/todoList'
 
-const store = {
-	todoList: [
-		{ title: 'タイトル1' },
-		{ title: 'タイトル2' },
-		{ title: 'タイトル3' },
-	]
-}
-
-const todoListUsecase = {
-	fetch: () => {}
-}
+const store = new TodoListStore();
+const driver = new TodoListDriver();
+const gateway = new TodoListGateway(driver);
+const todoListUsecase = new TodoListUsecase(gateway, store)
 
 export const StoreContext = React.createContext<typeof store>(store);
 export const TodoListUsecaseContext = React.createContext<typeof todoListUsecase>(todoListUsecase);
