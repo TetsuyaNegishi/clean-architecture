@@ -2,6 +2,7 @@ import axios from 'axios'
 
 interface ResponseTodoType {
 	title: string;
+	checked: boolean;
 }
 
 interface ResponseDataType {
