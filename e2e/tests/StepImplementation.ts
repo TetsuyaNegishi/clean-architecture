@@ -36,4 +36,15 @@ export default class StepImplementation {
         })
         equal(text, 'Learn React')
     }
+
+    @Step("<order>番目のTodoListのタイトルに<title>が表示されている")
+    public async displayTodoListTitle(order: number, title: string) {
+        const selector = `[data-testid=todo-title]`
+        await this.page.waitFor(selector)
+        const titleList = await this.page.$$eval(selector, elements => {
+            return elements.map(element => element.textContent)
+        })
+        const actual = titleList[order - 1]
+        equal(actual, title)
+    }
 }

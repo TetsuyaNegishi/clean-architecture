@@ -1,18 +1,16 @@
-const jsonServer = require('json-server')
+import db from './db'
+import * as jsonServer from 'json-server'
+
 const server = jsonServer.create()
 const middlewares = jsonServer.defaults()
 
 server.use(middlewares)
 
 server.use(jsonServer.rewriter({
-  '/api/test': '/test'
+  "/v1/*": "/$1"
 }));
 
-const router = jsonServer.router({
-  "test": {
-		"text": "Learn React"
-	}
-})
+const router = jsonServer.router(db);
 server.use(router)
 
 server.listen(4000, () => {
