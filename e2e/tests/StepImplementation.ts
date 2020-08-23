@@ -9,7 +9,7 @@ export default class StepImplementation {
 
     @BeforeSuite()
     public async setupBrowser() {
-        this.browser = await puppeteer.launch()
+        this.browser = await puppeteer.launch({headless: false})
     }
 
     @AfterSuite()
@@ -46,5 +46,16 @@ export default class StepImplementation {
         })
         const actual = titleList[order - 1]
         equal(actual, title)
+    }
+
+    @Step("<order>番目のTodoListのチェックボックスが<isChecked>である")
+    public async displayTodoListCheckbox(order: number, isChecked: string) {
+        const selector = `[data-testid=todo-checkbox] input[type=radio]`
+        await this.page.waitFor(selector)
+        const checkedList = await this.page.$$eval(selector, elements => {
+            return elements.map(element => element.checked)
+        })
+        const actual = checkedList[order - 1]
+        equal(actual, isChecked.toLowerCase() === "true")
     }
 }
