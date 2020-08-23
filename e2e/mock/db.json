@@ -2,15 +2,17 @@
 	"test": {
 		"text": "Learn React"
 	},
-	"todo-list" : [
-		{
-			"title": "タイトル1"
-		},
-		{
-			"title": "タイトル2"
-		},
-		{
-			"title": "タイトル3"
-		}
-	]
+	"todo-list": {
+		"todoList": [
+			{
+				"title": "タイトル1"
+			},
+			{
+				"title": "タイトル2"
+			},
+			{
+				"title": "タイトル3"
+			}
+		]
+	}
 }

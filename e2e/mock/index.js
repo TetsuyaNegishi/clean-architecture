@@ -5,14 +5,11 @@ const middlewares = jsonServer.defaults()
 server.use(middlewares)
 
 server.use(jsonServer.rewriter({
-  '/api/test': '/test'
+  "/v1/*": "/$1"
 }));
 
-const router = jsonServer.router({
-  "test": {
-		"text": "Learn React"
-	}
-})
+const db = require('./db.json');
+const router = jsonServer.router(db);
 server.use(router)
 
 server.listen(4000, () => {

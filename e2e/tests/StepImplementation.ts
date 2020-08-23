@@ -40,6 +40,7 @@ export default class StepImplementation {
     @Step("<order>番目のTodoListのタイトルに<title>が表示されている")
     public async displayTodoListTitle(order: number, title: string) {
         const selector = `[data-testid=todo-title]`
+        await this.page.waitFor(selector)
         const titleList = await this.page.$$eval(selector, elements => {
             return elements.map(element => element.textContent)
         })
