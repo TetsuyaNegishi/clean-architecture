@@ -13,10 +13,12 @@ describe('TodoListGateway', () => {
           return {
 						todoList: [
 							{
-								"title": "title1"
+								"title": "title1",
+								"checked": true
 							},
 							{
-								"title": "title2"
+								"title": "title2",
+								"checked": false
 							}
 						]
 					};
@@ -24,7 +26,7 @@ describe('TodoListGateway', () => {
       };
     })
 
-		const expected = [new Todo('title1'), new Todo('title2')]
+		const expected = [new Todo('title1', true), new Todo('title2', false)]
 
 		const gateway = new TodoListGateway(new TodoListDriver())
 		const actual = await gateway.fetch()

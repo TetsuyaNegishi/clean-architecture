@@ -2,11 +2,16 @@ import { observable, action } from 'mobx';
 import { OutputTodoListPort } from '../port/todoList';
 import { Todo } from '../domain/todo';
 
+type ValueType = {
+	title: string;
+	checked: boolean;
+}[]
+
 export class TodoListStore implements OutputTodoListPort {
-	@observable value: Todo[] = [];
+	@observable value: ValueType = [];
 
 	@action setTodoList(todoList: Todo[]) {
-		this.value = todoList;
+		this.value = todoList.map(({title, checked}) => ({title, checked}));
 	}
 
 	storeTodoList(todoList: Todo[]) {

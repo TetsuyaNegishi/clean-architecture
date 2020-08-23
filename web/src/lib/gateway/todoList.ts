@@ -14,8 +14,8 @@ export class TodoListGateway implements InputTodoListPort {
 		}
 
 		const { todoList } = response;
-		const todoDomainList = todoList.map(({ title }) => {
-			return new Todo(title)
+		const todoDomainList = todoList.map(({ title, checked }) => {
+			return new Todo(title, checked)
 		})
 
 		return todoDomainList

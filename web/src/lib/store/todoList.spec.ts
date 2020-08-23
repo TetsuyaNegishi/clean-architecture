@@ -5,9 +5,9 @@ describe('TodoListStore', () => {
 	it('store', async () => {
 		const store = new TodoListStore()
 
-		store.setTodoList([new Todo('title1'), new Todo('title2')])
+		store.setTodoList([new Todo('title1', true), new Todo('title2', false)])
 
-		const expected = [new Todo('title1'), new Todo('title2')]
+		const expected = [{title: 'title1', checked: true}, {title: 'title2', checked: false}]
 		const actual = store.value
 
 		expect(actual).toEqual(expected)
