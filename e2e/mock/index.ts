@@ -1,4 +1,6 @@
-const jsonServer = require('json-server')
+import db from './db'
+import * as jsonServer from 'json-server'
+
 const server = jsonServer.create()
 const middlewares = jsonServer.defaults()
 
@@ -8,7 +10,6 @@ server.use(jsonServer.rewriter({
   "/v1/*": "/$1"
 }));
 
-const db = require('./db.json');
 const router = jsonServer.router(db);
 server.use(router)
 
