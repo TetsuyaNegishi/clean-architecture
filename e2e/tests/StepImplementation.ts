@@ -69,6 +69,7 @@ export default class StepImplementation {
 
     private async getTodoElementByOrder(order: number) {
         const selector = `[data-testid=todo-item]:nth-of-type(${order})`
+        await this.page.waitFor(selector)
         const todoElement = await this.page.$(selector)
         return todoElement
     }
