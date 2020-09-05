@@ -1,5 +1,5 @@
 
-import { Step, BeforeSuite, BeforeSpec, AfterSpec, AfterSuite } from "gauge-ts";
+import { Step, BeforeSuite, BeforeSpec, AfterSpec, AfterSuite, BeforeScenario } from "gauge-ts";
 import { expect } from 'chai'
 import * as puppeteer from 'puppeteer';
 
@@ -28,6 +28,11 @@ export default class StepImplementation {
         await this.page.close();
     }
 
+    @BeforeScenario()
+    public async reloadPage() {
+        await this.page.reload();
+    }
+
     @Step("<order>番目のTodoListのタイトルに<title>が表示されている")
     public async displayTodoListTitle(order: number, title: string) {
         const selector = `[data-testid=todo-title]`
@@ -42,16 +47,29 @@ export default class StepImplementation {
     @Step("<order>番目のTodoListのチェックボックスが<checked>である")
     public async displayTodoListCheckbox(order: number, checked: string) {
         const isChecked = this.transformStringToBoolean(checked)
+        const todoElement = await this.getTodoElementByOrder(order)
+
         const selector = `[data-testid=todo-checkbox] input[type=radio]`
-        await this.page.waitFor(selector)
-        const checkedList = await this.page.$$eval(selector, elements => {
-            return elements.map(element => element.checked)
-        })
-        const actual = checkedList[order - 1]
+        const actual = await todoElement.$eval(selector, item => item.checked)
         expect(actual).to.equal(isChecked)
+    }
+
+    @Step("<order>番目のTodoListのチェックボックスをクリックする")
+    public async clickTodoListCheckbox(order: number) {
+        const selector = `[data-testid=todo-checkbox] input[type=radio]`
+        const checkboxElement = await this.page.$$(selector)
+        const targetElement = checkboxElement[order - 1]
+
+        targetElement.click()
     }
 
     private transformStringToBoolean(text: string): boolean {
         return text.toLowerCase() === "true"
+    }
+
+    private async getTodoElementByOrder(order: number) {
+        const selector = `[data-testid=todo-item]:nth-of-type(${order})`
+        const todoElement = await this.page.$(selector)
+        return todoElement
     }
 }
