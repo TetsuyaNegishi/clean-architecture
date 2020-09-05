@@ -1,3 +1,3 @@
 export class Todo {
-	constructor(readonly title: string, readonly checked: boolean){}
+	constructor(readonly id: string, readonly title: string, readonly checked: boolean){}
 }

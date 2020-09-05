@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { useObserver } from "mobx-react-lite"
 import { StoreContext, TodoListUsecaseContext } from './Provider'
 import {TodoList} from '../../component/organisms/TodoList'
@@ -9,9 +9,17 @@ export const TodoListPage: React.FC = () => {
 
 	useEffect(() => {
     todoListUsecase.fetch();
-  }, [todoListUsecase])
+	}, [todoListUsecase])
+
+	const handleOnCheckTodo = useCallback((id: string) => {
+		todoListUsecase.check(id)
+	}, [todoListUsecase])
+
+	const handleOnUnCheckTodo = useCallback((id: string) => {
+		todoListUsecase.uncheck(id)
+	}, [todoListUsecase])
 
 	return useObserver(() => {
-		return <TodoList todoList={store.value}/>
+		return <TodoList todoList={store.value} onCheckTodo={handleOnCheckTodo} onUnCheckTodo={handleOnUnCheckTodo} />
 	})
 }
