@@ -11,4 +11,12 @@ export class TodoListUsecase {
 		}
 		this.outputPort.storeTodoList(todoList);
 	}
+
+	check(id: string) {
+		this.outputPort.checkTodoById(id);
+	}
+
+	uncheck(id: string) {
+		this.outputPort.uncheckTodoById(id);
+	}
 }
