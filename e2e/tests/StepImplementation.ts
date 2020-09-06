@@ -9,6 +9,8 @@ const createSelector = (testId: string) => {
 
 const SELECTOR = {
     TODO_ITEM: createSelector("todo-item"),
+    TODO_TITLE: createSelector("todo-title"),
+    TODO_CHECKBOX: `${createSelector("todo-checkbox")} input[type=radio]`,
     TODO_DELETE_BUTTON: createSelector("todo-delete-button")
 }
 
@@ -54,12 +56,11 @@ export default class StepImplementation {
 
     @Step("<order>番目のTodoListのタイトルに<title>が表示されている")
     public async displayTodoListTitle(order: number, title: string) {
-        const selector = `[data-testid=todo-title]`
-        await this.page.waitFor(selector)
-        const titleList = await this.page.$$eval(selector, elements => {
-            return elements.map(element => element.textContent)
-        })
-        const actual = titleList[order - 1]
+        const todoElement = await this.getTodoElementByOrder(order)
+
+        const selector = SELECTOR.TODO_TITLE
+        const actual = await todoElement.$eval(selector, item => item.textContent);
+
         expect(actual).to.equal(title)
     }
 
@@ -68,16 +69,17 @@ export default class StepImplementation {
         const isChecked = this.transformStringToBoolean(checked)
         const todoElement = await this.getTodoElementByOrder(order)
 
-        const selector = `[data-testid=todo-checkbox] input[type=radio]`
+        const selector = SELECTOR.TODO_CHECKBOX
         const actual = await todoElement.$eval(selector, item => item.checked)
         expect(actual).to.equal(isChecked)
     }
 
     @Step("<order>番目のTodoListのチェックボックスをクリックする")
     public async clickTodoListCheckbox(order: number) {
-        const selector = `[data-testid=todo-checkbox] input[type=radio]`
-        const checkboxElement = await this.page.$$(selector)
-        const targetElement = checkboxElement[order - 1]
+        const todoElement = await this.getTodoElementByOrder(order)
+
+        const selector = SELECTOR.TODO_CHECKBOX
+        const targetElement = await todoElement.$(selector);
 
         targetElement.click()
     }
@@ -87,9 +89,9 @@ export default class StepImplementation {
         const todoElement = await this.getTodoElementByOrder(order);
 
         const selector = SELECTOR.TODO_DELETE_BUTTON;
-        const deleteButton = await todoElement.$(selector);
+        const targetElement = await todoElement.$(selector);
 
-        deleteButton.click()
+        targetElement.click()
     }
 
     private transformStringToBoolean(text: string): boolean {
