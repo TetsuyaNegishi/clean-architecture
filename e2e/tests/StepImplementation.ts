@@ -3,6 +3,15 @@ import { Step, BeforeSuite, BeforeSpec, AfterSpec, AfterSuite, BeforeScenario } 
 import { expect } from 'chai'
 import * as puppeteer from 'puppeteer';
 
+const createSelector = (testId: string) => {
+    return `[data-testid=${testId}]`
+}
+
+const SELECTOR = {
+    TODO_ITEM: createSelector("todo-item"),
+    TODO_DELETE_BUTTON: createSelector("todo-delete-button")
+}
+
 export default class StepImplementation {
     private browser: puppeteer.Browser;
     private page: puppeteer.Page;
@@ -31,6 +40,16 @@ export default class StepImplementation {
     @BeforeScenario()
     public async reloadPage() {
         await this.page.reload();
+    }
+
+    @Step("TodoListが<count>件表示されている")
+    public async countTodoList(count: string) {
+        const selector = SELECTOR.TODO_ITEM;
+        await this.page.waitFor(selector);
+        const todoElements = await this.page.$$(selector);
+        const actual = `${todoElements.length}`;
+
+        expect(actual).to.equal(count)
     }
 
     @Step("<order>番目のTodoListのタイトルに<title>が表示されている")
@@ -63,12 +82,22 @@ export default class StepImplementation {
         targetElement.click()
     }
 
+    @Step("<order>番目のTodoListの削除ボタンをクリックする")
+    public async clickTodoListDeleteButton(order: number) {
+        const todoElement = await this.getTodoElementByOrder(order);
+
+        const selector = SELECTOR.TODO_DELETE_BUTTON;
+        const deleteButton = await todoElement.$(selector);
+
+        deleteButton.click()
+    }
+
     private transformStringToBoolean(text: string): boolean {
         return text.toLowerCase() === "true"
     }
 
     private async getTodoElementByOrder(order: number) {
-        const selector = `[data-testid=todo-item]:nth-of-type(${order})`
+        const selector = `${SELECTOR.TODO_ITEM}:nth-of-type(${order})`
         await this.page.waitFor(selector)
         const todoElement = await this.page.$(selector)
         return todoElement
