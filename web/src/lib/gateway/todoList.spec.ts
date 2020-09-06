@@ -6,7 +6,7 @@ jest.mock('../driver/todoList');
 const TodoListDriverMock = TodoListDriver as jest.Mock;
 
 describe('TodoListGateway', () => {
-	it('fetch success', async () => {
+	test('fetch success', async () => {
 		TodoListDriverMock.mockImplementationOnce(() => {
       return {
         fetch: async () => {
@@ -36,7 +36,7 @@ describe('TodoListGateway', () => {
 		expect(actual).toEqual(expected)
 	})
 
-	it('fail to fetch', async () => {
+	test('fail to fetch', async () => {
 		TodoListDriverMock.mockImplementationOnce(() => {
 			return {
 				fetch: async () => {
@@ -49,5 +49,20 @@ describe('TodoListGateway', () => {
     const actual = await gateway.fetch();
 
     expect(actual instanceof Error).toBe(true)
+	})
+
+	test('post success', async () => {
+		const title = "title"
+
+		const driver = {} as TodoListDriver;
+		const postFunc = jest.fn(async () => ({id: "id", title: "title", checked: false}))
+		driver.post = postFunc
+		const gateway = new TodoListGateway(driver)
+
+		const actual = await gateway.post(title);
+		const expected = new Todo("id", "title", false);
+
+		expect(actual).toEqual(expected)
+		expect(postFunc).toBeCalledWith(title)
 	})
 })

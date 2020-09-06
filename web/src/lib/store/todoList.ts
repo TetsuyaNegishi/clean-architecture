@@ -36,6 +36,14 @@ export class TodoListStore implements OutputTodoListPort {
 		this.value = newValue;
 	}
 
+	@action addTodo(todo: Todo) {
+		const {id, title, checked} = todo
+		this.value = [
+			{id, title, checked},
+			...this.value
+		]
+	}
+
 	private findTodoIndex(todoId: string) {
 		return this.value.findIndex(({id}) => id === todoId)
 	}
