@@ -1,4 +1,4 @@
-const todoList = {
+export const getTodoList = {
 	"todoList": [
 		{
 			"id": "id1",
@@ -18,4 +18,8 @@ const todoList = {
 	]
 }
 
-export default todoList;
+export const postTodo = {
+	"id": "id4",
+	"title": "タイトル",
+	"checked": false
+}

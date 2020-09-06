@@ -1,11 +1,8 @@
-import todoList from './todo-list'
-
-// export const todoList = require('./todo-list').default
-export { todoList }
+import {getTodoList, postTodo} from './todo-list'
 
 const mergedJson = {
-	"todo-list": todoList
+	"todo-list": getTodoList,
+	"todo-list_post": postTodo,
 }
-
 
 export default mergedJson

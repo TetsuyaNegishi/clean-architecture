@@ -2,7 +2,16 @@ import db from './db'
 import * as jsonServer from 'json-server'
 
 const server = jsonServer.create()
-const middlewares = jsonServer.defaults()
+
+const transformPostPath = (req, res, next) => {
+  if (req.method === 'POST') {
+    req.method = 'GET'
+    req.url += '_post'
+  }
+  next()
+}
+
+const middlewares = [transformPostPath, ...jsonServer.defaults(), ]
 
 server.use(middlewares)
 

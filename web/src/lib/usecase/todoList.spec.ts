@@ -76,4 +76,23 @@ describe('TodoListUsecase', () => {
 		usecase.delete(todoId);
 		expect(deleteFunc).toBeCalledWith(todoId)
 	})
+
+	test("create success", async () => {
+		const todoTitle = 'title'
+		const newTodo = new Todo("id", "title", false);
+
+		const gateway = {} as InputTodoListPort;
+		const postFunc = jest.fn(async () => newTodo);
+		gateway.post = postFunc
+		const store = {} as OutputTodoListPort;
+		const addFunc = jest.fn();
+		store.addTodo = addFunc;
+		const usecase = new TodoListUsecase(gateway, store)
+
+		await usecase.create(todoTitle);
+
+		expect(postFunc).toBeCalledWith(todoTitle)
+		expect(addFunc).toBeCalledWith(newTodo)
+	})
+
 })

@@ -12,6 +12,11 @@ export class TodoListUsecase {
 		this.outputPort.storeTodoList(todoList);
 	}
 
+	async create(title: string) {
+		const newTodo = await this.inputPort.post(title)
+		this.outputPort.addTodo(newTodo)
+	}
+
 	check(id: string) {
 		this.outputPort.checkTodoById(id);
 	}

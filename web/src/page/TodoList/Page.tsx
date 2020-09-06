@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react'
 import { useObserver } from "mobx-react-lite"
 import { StoreContext, TodoListUsecaseContext } from './Provider'
 import {TodoList} from '../../component/organisms/TodoList'
+import { NewTodoListForm } from '../../component/organisms/NewTodoListForm'
 
 export const TodoListPage: React.FC = () => {
 	const store = React.useContext(StoreContext)
@@ -21,9 +22,16 @@ export const TodoListPage: React.FC = () => {
 
 	const handleOnDeleteTodo = useCallback((id: string) => {
 		todoListUsecase.delete(id)
-	}, [])
+	}, [todoListUsecase])
+
+	const handleOnSubmitTodo = useCallback((title: string) => {
+		todoListUsecase.create(title)
+	}, [todoListUsecase])
 
 	return useObserver(() => {
-		return <TodoList todoList={store.value} onCheckTodo={handleOnCheckTodo} onUnCheckTodo={handleOnUnCheckTodo} onDeleteTodo={handleOnDeleteTodo} />
+		return <>
+			<NewTodoListForm onSubmit={handleOnSubmitTodo} />
+			<TodoList todoList={store.value} onCheckTodo={handleOnCheckTodo} onUnCheckTodo={handleOnUnCheckTodo} onDeleteTodo={handleOnDeleteTodo} />
+		</>
 	})
 }
