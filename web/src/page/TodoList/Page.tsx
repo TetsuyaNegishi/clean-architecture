@@ -21,7 +21,7 @@ export const TodoListPage: React.FC = () => {
 
 	const handleOnDeleteTodo = useCallback((id: string) => {
 		todoListUsecase.delete(id)
-	}, [])
+	}, [todoListUsecase])
 
 	return useObserver(() => {
 		return <TodoList todoList={store.value} onCheckTodo={handleOnCheckTodo} onUnCheckTodo={handleOnUnCheckTodo} onDeleteTodo={handleOnDeleteTodo} />
