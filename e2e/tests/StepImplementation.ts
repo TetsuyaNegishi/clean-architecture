@@ -11,7 +11,9 @@ const SELECTOR = {
     TODO_ITEM: createSelector("todo-item"),
     TODO_TITLE: createSelector("todo-title"),
     TODO_CHECKBOX: `${createSelector("todo-checkbox")} input[type=radio]`,
-    TODO_DELETE_BUTTON: createSelector("todo-delete-button")
+    TODO_DELETE_BUTTON: createSelector("todo-delete-button"),
+    TODO_TITLE_INPUT_FIELD: `${createSelector("todo-title-input-field")} > input`,
+    ADD_TODO_BUTTON: createSelector("add-todo-button")
 }
 
 export default class StepImplementation {
@@ -47,7 +49,8 @@ export default class StepImplementation {
     @Step("TodoListが<count>件表示されている")
     public async countTodoList(count: string) {
         const selector = SELECTOR.TODO_ITEM;
-        await this.page.waitFor(selector);
+
+        await this.page.waitForFunction(`document.querySelectorAll("${selector}").length == ${count}`);
         const todoElements = await this.page.$$(selector);
         const actual = `${todoElements.length}`;
 
@@ -81,7 +84,7 @@ export default class StepImplementation {
         const selector = SELECTOR.TODO_CHECKBOX
         const targetElement = await todoElement.$(selector);
 
-        targetElement.click()
+        await targetElement.click()
     }
 
     @Step("<order>番目のTodoListの削除ボタンをクリックする")
@@ -91,7 +94,20 @@ export default class StepImplementation {
         const selector = SELECTOR.TODO_DELETE_BUTTON;
         const targetElement = await todoElement.$(selector);
 
-        targetElement.click()
+        await targetElement.click()
+    }
+
+    @Step("新規TodoListのタイトル入力欄に<title>と入力する")
+    public async fillNewTodoListTitleInput(title: string) {
+        const selector = SELECTOR.TODO_TITLE_INPUT_FIELD;
+        await this.page.type(selector, title);
+    }
+
+    @Step("TodoListの新規登録ボタンをクリックする")
+    public async clickAddTodoButton() {
+        const selector = SELECTOR.ADD_TODO_BUTTON;
+        const targetElement = await this.page.$(selector)
+        await targetElement.click();
     }
 
     private transformStringToBoolean(text: string): boolean {
