@@ -63,4 +63,17 @@ describe('TodoListUsecase', () => {
 		usecase.uncheck(todoId);
 		expect(uncheckFunc).toBeCalledWith(todoId)
 	})
+
+	test("delete success", () => {
+		const todoId = "id";
+
+		const gateway = {} as InputTodoListPort;
+		const store = {} as OutputTodoListPort;
+		const deleteFunc = jest.fn();
+		store.deleteTodoById = deleteFunc;
+		const usecase = new TodoListUsecase(gateway, store)
+
+		usecase.delete(todoId);
+		expect(deleteFunc).toBeCalledWith(todoId)
+	})
 })

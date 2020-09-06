@@ -29,6 +29,13 @@ export class TodoListStore implements OutputTodoListPort {
 		this.checkTodoByIndex(index, false);
 	}
 
+	@action deleteTodoById(todoId: string) {
+		const index = this.findTodoIndex(todoId);
+		const newValue = [...this.value];
+		newValue.splice(index, 1);
+		this.value = newValue;
+	}
+
 	private findTodoIndex(todoId: string) {
 		return this.value.findIndex(({id}) => id === todoId)
 	}

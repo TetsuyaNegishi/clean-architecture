@@ -19,4 +19,8 @@ export class TodoListUsecase {
 	uncheck(id: string) {
 		this.outputPort.uncheckTodoById(id);
 	}
+
+	delete(id: string) {
+		this.outputPort.deleteTodoById(id);
+	}
 }
