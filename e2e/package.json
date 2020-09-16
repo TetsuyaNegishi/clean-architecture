@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Starter template for writing TypeScript tests for Gauge",
   "scripts": {
-    "start": "gauge run",
+    "e2e:web": "gauge run -e \"default, web\"",
     "mock": "ts-node ./mock/index.ts"
   },
   "dependencies": {
