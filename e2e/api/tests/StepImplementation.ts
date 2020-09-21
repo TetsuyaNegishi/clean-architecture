@@ -9,16 +9,16 @@ import * as fs from 'fs'
 const API_URL = "http://localhost:4000"
 
 const database = new Pool({
-    user: 'dev',
-    password: 'password',
-    host: 'localhost',
-    database: 'todo-list',
-    port: 5432,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    port: parseInt(process.env.DB_PORT),
 })
 
 export default class StepImplementation {
     @Step("todoテーブルに<path>のデータを用意する")
-    public async aa(path: string) {
+    public async storeTodoTable(path: string) {
         await database.query("TRUNCATE todo")
         await fs.createReadStream(path)
             .pipe(fastcsv.parse({headers: true}))
