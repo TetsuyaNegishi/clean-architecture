@@ -1,7 +1,10 @@
 
 import { Step, BeforeSuite, BeforeSpec, AfterSpec, AfterSuite, BeforeScenario } from "gauge-ts";
 import { expect } from 'chai'
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
+import { Pool } from "pg";
+import * as fastcsv from 'fast-csv';
+import * as fs from 'fs'
 
 const createSelector = (testId: string) => {
     return `[data-testid=${testId}]`
@@ -16,13 +19,32 @@ const SELECTOR = {
     ADD_TODO_BUTTON: createSelector("add-todo-button")
 }
 
+const database = new Pool({
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    port: parseInt(process.env.DB_PORT),
+})
+
 export default class StepImplementation {
     private browser: puppeteer.Browser;
     private page: puppeteer.Page;
 
     @BeforeSuite()
     public async setupBrowser() {
+        await this.storeApiData()
         this.browser = await puppeteer.launch({headless: false})
+    }
+
+    private async storeApiData() {
+        const sourcePath = 'web/source/test.csv'
+        await database.query("TRUNCATE todo")
+        await fs.createReadStream(sourcePath)
+            .pipe(fastcsv.parse({headers: true}))
+            .on('data', (data) => {
+                database.query("INSERT INTO todo(id, title, checked) VALUES($1, $2, $3)", Object.values(data))
+            });
     }
 
     @AfterSuite()
@@ -44,6 +66,11 @@ export default class StepImplementation {
     @BeforeScenario()
     public async reloadPage() {
         await this.page.reload();
+    }
+
+    @BeforeScenario({tags: ['resetApi']})
+    public async resetDB() {
+        await this.storeApiData()
     }
 
     @Step("TodoListが<count>件表示されている")
