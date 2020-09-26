@@ -1,5 +1,5 @@
 
-import { Step, DataStoreFactory  } from "gauge-ts";
+import { Step, DataStoreFactory, AfterScenario  } from "gauge-ts";
 import { expect } from 'chai';
 import axios from 'axios';
 import { Pool } from 'pg';
@@ -20,11 +20,26 @@ export default class StepImplementation {
     @Step("todoテーブルに<path>のデータを用意する")
     public async storeTodoTable(path: string) {
         await database.query("TRUNCATE todo")
-        await fs.createReadStream(path)
+        const rows = await this.importCsvRows(path)
+        for await (const row of rows) {
+            await database.query("INSERT INTO todo(id, title, checked) VALUES($1, $2, $3)", Object.values(row))
+        }
+    }
+
+    private importCsvRows(path: string): Promise<object[]> {
+        const data = []
+        return new Promise((resolve, reject) => {
+            fs.createReadStream(path)
             .pipe(fastcsv.parse({headers: true}))
-            .on('data', (data) => {
-                database.query("INSERT INTO todo(id, title, checked) VALUES($1, $2, $3)", Object.values(data))
-            });
+            .on('data', async (row) => {
+                data.push(row)
+            })
+            .on('end', () => {
+                resolve(data)
+            })
+            .on('error', reject);
+        })
+
     }
 
     @Step("apiの<path>にGetリクエストを投げる")
@@ -43,11 +58,26 @@ export default class StepImplementation {
         expect(actual).to.equal(value)
     }
 
+    @Step("レスポンスのJsonの<keys>がBooleanの<value>となる")
+    public matchJsonBooleanValue(keys: string, value: string) {
+        const json = this.getResponseJson()
+        const actual = keys.split('.').reduce((prev, current) => {
+            return prev[current]
+        }, json)
+        const expected = value === 'true'
+        expect(actual).to.equal(expected)
+    }
+
     private setJson(json: unknown) {
         DataStoreFactory.getScenarioDataStore().put("JSON", json)
     }
 
     private getResponseJson() {
         return DataStoreFactory.getScenarioDataStore().get("JSON")
+    }
+
+    @AfterScenario()
+    public clearDataStore() {
+        DataStoreFactory.getScenarioDataStore().clear()
     }
 }
