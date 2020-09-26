@@ -14,7 +14,7 @@ export class FetchError extends Error {}
 
 export class TodoListDriver {
 	async fetch() {
-		const { status, data } = await axios.get<FetchResponseDataType>('http://localhost:4000/v1/todo-list')
+		const { status, data } = await axios.get<FetchResponseDataType>('http://localhost:4000/v1/todo')
 		if (status <= 400) {
 			return data;
 		}
@@ -23,7 +23,7 @@ export class TodoListDriver {
 	}
 
 	async post(title: string): Promise<TodoValueType> {
-		const { data } = await axios.post<TodoValueType>('http://localhost:4000/v1/todo-list', { title })
+		const { data } = await axios.post<TodoValueType>('http://localhost:4000/v1/todo', { title })
 		return data
 	}
 }
