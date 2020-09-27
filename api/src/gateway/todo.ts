@@ -31,6 +31,10 @@ export class TodoGateway implements TodoPort{
 		return todo;
 	}
 
+	async delete(todoId: string) {
+		await this.driver.delete(todoId)
+	}
+
 	private transformJsonToDomain({ id, title, checked }: {id: string, title: string, checked: boolean}) {
 		return new Todo(id, title, checked);
 	}

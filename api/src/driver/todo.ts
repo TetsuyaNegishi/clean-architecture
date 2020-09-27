@@ -35,4 +35,8 @@ export class TodoDriver {
 		const response = await database.query<{id: string, title: string, checked: boolean}>(`insert into todo(title, checked) values('${title}', ${checked}) returning id, title, checked`)
 		return response.rows[0]
 	}
+
+	async delete(id: string) {
+		await database.query(`delete from todo where id = ${id}`)
+	}
 }

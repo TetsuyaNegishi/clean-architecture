@@ -22,3 +22,8 @@
 * apiの"/v1/todo"にbody"{\"title\": \"タイトル\"}"でPostリクエストを投げる
 * レスポンスのJsonの"title"が"タイトル"となる
 * レスポンスのJsonの"checked"がBooleanの"false"となる
+
+## ユーザはtodoリストを削除できる
+* apiの"/v1/todo/1"にDeleteリクエストを投げる
+* apiの"/v1/todo"にGetリクエストを投げる
+* レスポンスのJsonの"todoList"のlengthが"2"となる

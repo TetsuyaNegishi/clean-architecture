@@ -76,4 +76,17 @@ describe('TodoGateway', () => {
 
 		expect(createFunc).toBeCalledWith({ title, checked: false })
 	})
+
+	test('delete', async () => {
+		const todoId = '1'
+
+		const driver = {} as TodoDriver
+		const deleteFunc = jest.fn();
+		driver.delete = deleteFunc
+		const target = new TodoGateway(driver);
+
+		await target.delete(todoId)
+
+		expect(deleteFunc).toBeCalledWith(todoId)
+	})
 })
