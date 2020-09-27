@@ -12,9 +12,11 @@ interface FetchResponseDataType {
 
 export class FetchError extends Error {}
 
+const API_URL = 'http://localhost:4000'
+
 export class TodoListDriver {
 	async fetch() {
-		const { status, data } = await axios.get<FetchResponseDataType>('http://localhost:4000/v1/todo')
+		const { status, data } = await axios.get<FetchResponseDataType>(`${API_URL}/v1/todo`)
 		if (status <= 400) {
 			return data;
 		}
@@ -23,7 +25,12 @@ export class TodoListDriver {
 	}
 
 	async post(title: string): Promise<TodoValueType> {
-		const { data } = await axios.post<TodoValueType>('http://localhost:4000/v1/todo', { title })
+		const { data } = await axios.post<TodoValueType>(`${API_URL}/v1/todo`, { title })
+		return data
+	}
+
+	async patch(todoId: string, patchBody: Partial<TodoValueType>) {
+		const { data } = await axios.patch<TodoValueType>(`${API_URL}/v1/todo/${todoId}`, patchBody);
 		return data
 	}
 }

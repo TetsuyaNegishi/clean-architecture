@@ -1,10 +1,10 @@
-import { InputTodoListPort } from "../port/todoList";
+import { TodoListPort } from "../port/todoList";
 import { TodoListDriver, TodoValueType } from "../driver/todoList";
 import { Todo } from "../domain/todo";
 
 export class DriverFetchError extends Error {}
 
-export class TodoListGateway implements InputTodoListPort {
+export class TodoListGateway implements TodoListPort {
 	constructor(private driver: TodoListDriver) {}
 
 	async fetch() {
@@ -21,6 +21,12 @@ export class TodoListGateway implements InputTodoListPort {
 
 	async post(title: string) {
 		const response = await this.driver.post(title);
+		const todoDomain = this.transformTodoValueToTodoDomain(response)
+		return todoDomain;
+	}
+
+	async check(todoId: string) {
+		const response = await this.driver.patch(todoId, { checked: true})
 		const todoDomain = this.transformTodoValueToTodoDomain(response)
 		return todoDomain;
 	}
