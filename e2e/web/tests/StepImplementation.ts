@@ -37,6 +37,7 @@ export default class StepImplementation {
         this.browser = await puppeteer.launch({headless: false})
     }
 
+    @AfterSpec({tags: ['reset-api-data']})
     private async storeApiData() {
         const sourcePath = 'web/source/test.csv'
         await database.query("TRUNCATE todo")

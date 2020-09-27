@@ -21,11 +21,13 @@
 * "1"番目のTodoListのチェックボックスが"false"である
 
 ## ユーザはtodoリストを削除できる
+tags: reset-api-data
 * TodoListが"3"件表示されている
 * "1"番目のTodoListの削除ボタンをクリックする
 * TodoListが"2"件表示されている
 
 ## ユーザはtodoリストを追加できる
+tags: reset-api-data
 * TodoListが"3"件表示されている
 * 新規TodoListのタイトル入力欄に"タイトル"と入力する
 * TodoListの新規登録ボタンをクリックする
