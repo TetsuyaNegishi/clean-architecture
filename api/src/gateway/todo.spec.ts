@@ -55,4 +55,25 @@ describe('TodoGateway', () => {
 
 		expect(updateFunc).toBeCalledWith(todoJson)
 	})
+
+	test('create', async () => {
+		const title = 'title';
+		const newTodoJson = {
+			id: '1',
+			title: 'title',
+			checked: false
+		}
+
+		const driver = {} as TodoDriver
+		const createFunc = jest.fn(async () => newTodoJson);
+		driver.create = createFunc
+		const target = new TodoGateway(driver);
+
+		const actual = await target.create(title)
+		const expected = new Todo('1', 'title', false)
+
+		expect(actual).toEqual(expected)
+
+		expect(createFunc).toBeCalledWith({ title, checked: false })
+	})
 })

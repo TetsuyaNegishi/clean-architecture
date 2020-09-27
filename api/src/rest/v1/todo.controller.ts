@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common'
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common'
 import { Todo } from 'src/domain/Todo'
 import { TodoUsecase } from 'src/usecase/Todo'
 
@@ -19,6 +19,12 @@ export class TodoController {
 	@Patch(":id")
 	async patchTodo(@Param() params, @Body() body: Partial<Omit<Todo, 'id'>>) {
 		const todo = await this.todoUsecase.update(params.id, body);
+		return todo.toJson()
+	}
+
+	@Post()
+	async postTodo(@Body() { title }: Partial<Omit<Omit<Todo, 'id'>, 'checked'>>) {
+		const todo = await this.todoUsecase.create(title);
 		return todo.toJson()
 	}
 }

@@ -25,6 +25,12 @@ export class TodoGateway implements TodoPort{
 		return todo
 	}
 
+	async create(title: string) {
+		const todoJson = await this.driver.create({title, checked: false})
+		const todo = this.transformJsonToDomain(todoJson)
+		return todo;
+	}
+
 	private transformJsonToDomain({ id, title, checked }: {id: string, title: string, checked: boolean}) {
 		return new Todo(id, title, checked);
 	}
