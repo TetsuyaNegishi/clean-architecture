@@ -1,4 +1,4 @@
-import { InputTodoListPort, OutputTodoListPort } from "../port/todoList"
+import { TodoListPort, OutputTodoListPort } from "../port/todoList"
 import { Todo } from "../domain/todo"
 import { TodoListUsecase } from '../usecase/todoList'
 
@@ -6,7 +6,7 @@ describe('TodoListUsecase', () => {
 	test('fetch success', async () => {
 		const todoList = [new Todo('id1', 'title1', false), new Todo('id2', 'title2', true)]
 
-		const gateway = {} as InputTodoListPort;
+		const gateway = {} as TodoListPort;
 		const fetchFunc = jest.fn(async () => todoList);
 		gateway.fetch = fetchFunc;
 		const store = {} as OutputTodoListPort;
@@ -22,7 +22,7 @@ describe('TodoListUsecase', () => {
 	})
 
 	test('faild to fetch', async () => {
-		const gateway = {} as InputTodoListPort;
+		const gateway = {} as TodoListPort;
 		const fetchFunc = jest.fn(async () => new Error());
 		gateway.fetch = fetchFunc;
 		const store = {} as OutputTodoListPort;
@@ -40,34 +40,40 @@ describe('TodoListUsecase', () => {
 	test("check success", () => {
 		const todoId = "id";
 
-		const gateway = {} as InputTodoListPort;
+		const gateway = {} as TodoListPort;
+		const gatewayCheckFunc = jest.fn(async () => ({} as Todo));
+		gateway.check = gatewayCheckFunc;
 		const store = {} as OutputTodoListPort;
-		const checkFunc = jest.fn();
-		store.checkTodoById = checkFunc;
+		const storeCheckFunc = jest.fn();
+		store.checkTodoById = storeCheckFunc;
 		const usecase = new TodoListUsecase(gateway, store)
 
 		usecase.check(todoId);
 
-		expect(checkFunc).toBeCalledWith(todoId)
+		expect(gatewayCheckFunc).toBeCalledWith(todoId)
+		expect(storeCheckFunc).toBeCalledWith(todoId)
 	})
 
 	test("uncheck success", () => {
 		const todoId = "id";
 
-		const gateway = {} as InputTodoListPort;
+		const gateway = {} as TodoListPort;
+		const gatewayUncheckFunc = jest.fn(async () => ({} as Todo));
+		gateway.uncheck = gatewayUncheckFunc;
 		const store = {} as OutputTodoListPort;
 		const uncheckFunc = jest.fn();
 		store.uncheckTodoById = uncheckFunc;
 		const usecase = new TodoListUsecase(gateway, store)
 
 		usecase.uncheck(todoId);
+		expect(gatewayUncheckFunc).toBeCalledWith(todoId)
 		expect(uncheckFunc).toBeCalledWith(todoId)
 	})
 
 	test("delete success", () => {
 		const todoId = "id";
 
-		const gateway = {} as InputTodoListPort;
+		const gateway = {} as TodoListPort;
 		const store = {} as OutputTodoListPort;
 		const deleteFunc = jest.fn();
 		store.deleteTodoById = deleteFunc;
@@ -81,7 +87,7 @@ describe('TodoListUsecase', () => {
 		const todoTitle = 'title'
 		const newTodo = new Todo("id", "title", false);
 
-		const gateway = {} as InputTodoListPort;
+		const gateway = {} as TodoListPort;
 		const postFunc = jest.fn(async () => newTodo);
 		gateway.post = postFunc
 		const store = {} as OutputTodoListPort;

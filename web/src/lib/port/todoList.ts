@@ -1,8 +1,10 @@
 import { Todo } from '../domain/todo'
 
-export interface InputTodoListPort {
-	fetch: () => Promise<Todo[] | Error>
+export interface TodoListPort {
+	fetch: () => Promise<Todo[] | Error>;
 	post: (title: string) => Promise<Todo>;
+	check: (todoId: string) => Promise<Todo>;
+	uncheck: (todoId: string) => Promise<Todo>;
 }
 
 export interface OutputTodoListPort {
