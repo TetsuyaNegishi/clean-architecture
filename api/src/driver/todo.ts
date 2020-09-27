@@ -21,4 +21,13 @@ export class TodoDriver {
 		const todos = await database.query<TodoJson>("select * from todo order by id");
 		return todos.rows;
 	}
+
+	async find(id: string): Promise<TodoJson> {
+		const todo = await database.query<TodoJson>(`select * from todo where id = ${id}`)
+		return todo.rows[0]
+	}
+
+	async update({id, title, checked}: TodoJson): Promise<void> {
+		await database.query(`update todo set title = '${title}', checked = ${checked} where id = ${id}`)
+	}
 }
