@@ -4,6 +4,7 @@ export interface TodoListPort {
 	fetch: () => Promise<Todo[] | Error>;
 	post: (title: string) => Promise<Todo>;
 	check: (todoId: string) => Promise<Todo>;
+	uncheck: (todoId: string) => Promise<Todo>;
 }
 
 export interface OutputTodoListPort {

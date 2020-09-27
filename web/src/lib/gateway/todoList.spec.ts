@@ -81,4 +81,20 @@ describe('TodoListGateway', () => {
 		expect(actual).toEqual(expected)
 		expect(patchFunc).toBeCalledWith(todoId, patchBody)
 	})
+
+	test('uncheck success', async () => {
+		const todoId = "id"
+		const patchBody = {checked: false}
+
+		const driver = {} as TodoListDriver;
+		const patchFunc = jest.fn(async () => ({id: "id", title: "title", checked: false}))
+		driver.patch = patchFunc
+		const gateway = new TodoListGateway(driver)
+
+		const actual = await gateway.uncheck(todoId);
+		const expected = new Todo("id", "title", false);
+
+		expect(actual).toEqual(expected)
+		expect(patchFunc).toBeCalledWith(todoId, patchBody)
+	})
 })

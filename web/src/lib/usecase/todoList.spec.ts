@@ -58,12 +58,15 @@ describe('TodoListUsecase', () => {
 		const todoId = "id";
 
 		const gateway = {} as TodoListPort;
+		const gatewayUncheckFunc = jest.fn(async () => ({} as Todo));
+		gateway.uncheck = gatewayUncheckFunc;
 		const store = {} as OutputTodoListPort;
 		const uncheckFunc = jest.fn();
 		store.uncheckTodoById = uncheckFunc;
 		const usecase = new TodoListUsecase(gateway, store)
 
 		usecase.uncheck(todoId);
+		expect(gatewayUncheckFunc).toBeCalledWith(todoId)
 		expect(uncheckFunc).toBeCalledWith(todoId)
 	})
 

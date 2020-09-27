@@ -31,6 +31,12 @@ export class TodoListGateway implements TodoListPort {
 		return todoDomain;
 	}
 
+	async uncheck(todoId: string) {
+		const response = await this.driver.patch(todoId, { checked: false})
+		const todoDomain = this.transformTodoValueToTodoDomain(response)
+		return todoDomain;
+	}
+
 	private transformTodoValueToTodoDomain(todoValue: TodoValueType ) {
 		const {id, title, checked} = todoValue;
 		return new Todo(id, title, checked);
