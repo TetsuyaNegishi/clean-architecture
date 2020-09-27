@@ -55,6 +55,12 @@ export default class StepImplementation {
         this.setJson(data)
     }
 
+    @Step("apiの<path>にbody<body>でPostリクエストを投げる")
+    public async postApi(path: string, body: string) {
+        const url = `${API_URL}${path}`
+        const { data } = await axios.post(url, JSON.parse(body))
+        this.setJson(data)
+    }
 
     @Step("レスポンスのJsonの<keys>が<value>となる")
     public matchJsonValue(keys: string, value: string) {

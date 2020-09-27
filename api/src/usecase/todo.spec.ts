@@ -41,4 +41,21 @@ describe('TodoUsecase', () => {
 		expect(getFunc).toBeCalled()
 		expect(updateFunc).toBeCalledWith(afterTodo)
 	})
+
+	test("todoを作成する", async () => {
+		const title = 'title'
+		const newTodo = new Todo('1', 'title', false)
+
+		const todoGateway = {} as TodoPort;
+		const createFunc = jest.fn(async () => newTodo)
+		todoGateway.create = createFunc
+		const target = new TodoUsecase(todoGateway);
+
+		const actual = await target.create(title);
+		const expected = new Todo("1", "title", false);
+
+		expect(actual).toEqual(expected)
+
+		expect(createFunc).toBeCalledWith(title)
+	})
 })

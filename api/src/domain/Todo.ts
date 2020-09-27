@@ -23,6 +23,14 @@ export class Todo {
 		this._checked = false;
 		return this;
 	}
+
+	toJson() {
+		return {
+			id: this.id,
+			title: this._title,
+			checked: this._checked
+		}
+	}
 }
 
 export type Todos = Todo[];

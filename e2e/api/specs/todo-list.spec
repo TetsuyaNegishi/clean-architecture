@@ -17,3 +17,8 @@
 ## ユーザはtodoリストをチェックできる
 * apiの"/v1/todo/2"にbody"{\"checked\": true}"でPatchリクエストを投げる
 * レスポンスのJsonの"checked"がBooleanの"true"となる
+
+## ユーザはtodoリストを追加できる
+* apiの"/v1/todo"にbody"{\"title\": \"タイトル\"}"でPostリクエストを投げる
+* レスポンスのJsonの"title"が"タイトル"となる
+* レスポンスのJsonの"checked"がBooleanの"false"となる

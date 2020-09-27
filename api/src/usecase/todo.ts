@@ -17,4 +17,9 @@ export class TodoUsecase {
 		await this.todoPort.update(todo)
 		return todo
 	}
+
+	async create(title: string) {
+		const todo = this.todoPort.create(title)
+		return todo
+	}
 }
