@@ -58,4 +58,17 @@ describe('TodoUsecase', () => {
 
 		expect(createFunc).toBeCalledWith(title)
 	})
+
+	test("todoを削除する", async () => {
+		const todoId = '1'
+
+		const todoGateway = {} as TodoPort
+		const deleteFunc = jest.fn()
+		todoGateway.delete = deleteFunc
+		const target = new TodoUsecase(todoGateway);
+
+		await target.delete(todoId);
+
+		expect(deleteFunc).toBeCalledWith(todoId)
+	})
 })

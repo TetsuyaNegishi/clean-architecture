@@ -62,6 +62,13 @@ export default class StepImplementation {
         this.setJson(data)
     }
 
+    @Step("apiの<path>にDeleteリクエストを投げる")
+    public async deleteApi(path: string) {
+        const url = `${API_URL}${path}`
+        const { data } = await axios.delete(url)
+        this.setJson(data)
+    }
+
     @Step("レスポンスのJsonの<keys>が<value>となる")
     public matchJsonValue(keys: string, value: string) {
         const json = this.getResponseJson()
@@ -79,6 +86,16 @@ export default class StepImplementation {
         }, json)
         const expected = value === 'true'
         expect(actual).to.equal(expected)
+    }
+
+    @Step("レスポンスのJsonの<keys>のlengthが<length>となる")
+    public matchJsonValueLength(keys: string, lengthStr: string) {
+        const length = parseInt(lengthStr)
+        const json = this.getResponseJson()
+        const actual = keys.split('.').reduce((prev, current) => {
+            return prev[current]
+        }, json)
+        expect(actual).to.have.lengthOf(length)
     }
 
     private setJson(json: unknown) {

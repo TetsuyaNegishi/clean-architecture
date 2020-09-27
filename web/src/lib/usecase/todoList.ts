@@ -27,7 +27,8 @@ export class TodoListUsecase {
 		this.todoListPort.uncheck(id).catch(err => console.error(err));
 	}
 
-	delete(id: string) {
+	async delete(id: string) {
+		this.todoListPort.delete(id);
 		this.outputPort.deleteTodoById(id);
 	}
 }

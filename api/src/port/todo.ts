@@ -5,4 +5,5 @@ export abstract class TodoPort {
 	get: (id: string) => Promise<Todo>;
 	update: (todo: Todo) => Promise<Todo>;
 	create: (titile: string) => Promise<Todo>;
+	delete: (id: string) => Promise<void>;
 }

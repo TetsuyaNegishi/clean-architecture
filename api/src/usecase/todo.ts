@@ -22,4 +22,8 @@ export class TodoUsecase {
 		const todo = this.todoPort.create(title)
 		return todo
 	}
+
+	async delete(id: string) {
+		await this.todoPort.delete(id)
+	}
 }
