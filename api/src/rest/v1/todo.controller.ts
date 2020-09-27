@@ -7,7 +7,6 @@ export class TodoController {
 	constructor(private todoUsecase: TodoUsecase) {}
 
 	@Get()
-	@Header('Access-Control-Allow-Origin', '*')
 	async getAllTodo() {
 		const todos = await this.todoUsecase.getAll()
 		return {
