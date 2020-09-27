@@ -39,7 +39,6 @@ export default class StepImplementation {
             })
             .on('error', reject);
         })
-
     }
 
     @Step("apiの<path>にGetリクエストを投げる")
@@ -48,6 +47,14 @@ export default class StepImplementation {
         const { data } = await axios.get(url)
         this.setJson(data)
     }
+
+    @Step("apiの<path>にbody<body>でPatchリクエストを投げる")
+    public async patchApi(path: string, body: string) {
+        const url = `${API_URL}${path}`
+        const { data } = await axios.patch(url, JSON.parse(body))
+        this.setJson(data)
+    }
+
 
     @Step("レスポンスのJsonの<keys>が<value>となる")
     public matchJsonValue(keys: string, value: string) {
