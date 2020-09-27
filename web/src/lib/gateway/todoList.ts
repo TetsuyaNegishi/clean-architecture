@@ -37,6 +37,10 @@ export class TodoListGateway implements TodoListPort {
 		return todoDomain;
 	}
 
+	async delete(todoId: string) {
+		await this.driver.delete(todoId);
+	}
+
 	private transformTodoValueToTodoDomain(todoValue: TodoValueType ) {
 		const {id, title, checked} = todoValue;
 		return new Todo(id, title, checked);

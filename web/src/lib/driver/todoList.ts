@@ -33,4 +33,8 @@ export class TodoListDriver {
 		const { data } = await axios.patch<TodoValueType>(`${API_URL}/v1/todo/${todoId}`, patchBody);
 		return data
 	}
+
+	async delete(todoId: string) {
+		await axios.delete(`${API_URL}/v1/todo/${todoId}`)
+	}
 }

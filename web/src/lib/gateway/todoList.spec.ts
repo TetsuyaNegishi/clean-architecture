@@ -97,4 +97,17 @@ describe('TodoListGateway', () => {
 		expect(actual).toEqual(expected)
 		expect(patchFunc).toBeCalledWith(todoId, patchBody)
 	})
+
+	test('delete success', async () => {
+		const todoId = "id";
+
+		const driver = {} as TodoListDriver;
+		const deleteFunc = jest.fn()
+		driver.delete = deleteFunc
+		const gateway = new TodoListGateway(driver)
+
+		await gateway.delete(todoId)
+
+		expect(deleteFunc).toBeCalledWith(todoId)
+	})
 })

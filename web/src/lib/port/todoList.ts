@@ -5,6 +5,7 @@ export interface TodoListPort {
 	post: (title: string) => Promise<Todo>;
 	check: (todoId: string) => Promise<Todo>;
 	uncheck: (todoId: string) => Promise<Todo>;
+	delete: (todoId: string) => Promise<void>;
 }
 
 export interface OutputTodoListPort {

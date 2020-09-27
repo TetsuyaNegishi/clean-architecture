@@ -74,13 +74,17 @@ describe('TodoListUsecase', () => {
 		const todoId = "id";
 
 		const gateway = {} as TodoListPort;
+		const deleteFunc = jest.fn()
+		gateway.delete = deleteFunc
 		const store = {} as OutputTodoListPort;
-		const deleteFunc = jest.fn();
-		store.deleteTodoById = deleteFunc;
+		const deleteTodoByIdFunc = jest.fn();
+		store.deleteTodoById = deleteTodoByIdFunc;
 		const usecase = new TodoListUsecase(gateway, store)
 
 		usecase.delete(todoId);
+
 		expect(deleteFunc).toBeCalledWith(todoId)
+		expect(deleteTodoByIdFunc).toBeCalledWith(todoId)
 	})
 
 	test("create success", async () => {
